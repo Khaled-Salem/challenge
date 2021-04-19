@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>CodeFactory Challenge</title>
+</head>
+<body style="background-color:#005580;">
+
+<div class="container" style="background-color:white;">
+    <!--Start Page Header-->
+    <div class="row">
+        <div class="col-7">
+            <h6>DKB CodeFactory Challenge</h6>
+        </div>
+        <div class="col-5" align="right">
+            <h6 th:text="'Welcome Mr./Mrs. ' + ${user.lastName}"></h6>
+        </div>
+        <div class="col-3 mt-5 offset-md-1">
+            <a class="btn btn-primary" th:href="@{/index}" role="button" title="Back">
+                <i class="fas fa-long-arrow-alt-left"></i>
+            </a>
+        </div>
+        <div class="col-8 mt-5">
+            <h4 th:text="${account.name} + ' ' + Account + ' ' + History + ' ' + '(' + ${account.type} + ')'">
+                <u></u></h4>
+        </div>
+    </div>
+    <!--End Page Header-->
+
+    <!--Start Accounts table -->
+    <div class="row">
+        <div class="col-12" align="center">
+            <table class="col-10 table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Timestamp</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${transactions.empty}">
+                    <td colspan="2"> No history created yet!</td>
+                </tr>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.id}"></td>
+                    <td th:text="${transaction.type}"></td>
+                    <td th:text="€ + ${transaction.amount}"></td>
+                    <td th:text="${{transaction.createdAt}}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--End Accounts table -->
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/374498bfdb.js" crossorigin="anonymous"></script>
+</body>
+</html>

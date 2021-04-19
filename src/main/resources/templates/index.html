@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>CodeFactory Challenge</title>
+</head>
+<body style="background-color:#005580;">
+
+<div class="container" style="background-color:white;">
+    <!--Start Page Header-->
+    <div class="row">
+        <div class="col-7">
+            <h6>DKB CodeFactory Challenge</h6>
+        </div>
+        <div class="col-5" align="right">
+            <h6 th:text="'Welcome Mr./Mrs. ' + ${user.lastName}"></h6>
+        </div>
+    </div>
+    <!--End Page Header-->
+
+    <!--Start Add Account -->
+    <div class="row">
+        <div class="col-12" align="right">
+            <a class="btn btn-success" th:href="@{/create_account/{id}(id=${user.id})}" role="button"
+               title="Add Account"><i
+                    class="fas fa-file-invoice-dollar"></i></a>
+        </div>
+    </div>
+    <!--End Add Account -->
+
+    <!--Start Accounts table -->
+    <div class="row">
+        <div class="col-11" align="right" style="margin-top:95px;" >
+            <div class="col-3" style="margin-right:-18px;">
+                <label for="accountTypes">Filter (Multiple):</label>
+                <select id="accountTypes" required class="form-control" multiple="3">
+                    <option value="Checking">Checking</option>
+                    <option value="Savings">Savings</option>
+                    <option value="Private Loan">Private Loan</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-12" align="center">
+            <table class="col-10 table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Account Type</th>
+                    <th scope="col">IBAN</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${accounts.empty}">
+                    <td colspan="2"> No Accounts Available</td>
+                </tr>
+                <tr th:id="row + ${account.id}" th:class="${account.type}" th:each="account : ${accounts}">
+                    <td th:text="${account.id}"></td>
+                    <td th:text="${account.name}"></td>
+                    <td th:text="${account.type}"></td>
+                    <td th:text="${account.iban}"></td>
+                    <td th:text="€ + ${account.balance}"></td>
+                    <td align="right">
+                        <a th:if="${account.isLocked==false}"
+                           th:href="@{/deposit(id=${account.id},iban=${account.iban})}" title="Deposit"
+                           style="text-decoration:none; color:inherit;">
+                            <i class="fas fa-wallet"></i>
+                        </a>
+                        <a th:if="${account.isLocked==false}"
+                           th:href="@{/transfer(id=${account.id},ibanFrom=${account.iban})}" title="Transfer"
+                           style="text-decoration:none; color:inherit;">
+                            <i class="fas fa-exchange-alt" style="padding-left:1em"></i>
+                        </a>
+                        <a th:href="@{/history(id=${account.id})}" title="History"
+                           style="text-decoration:none; color:inherit;">
+                        <i class="fas fa-history" style="padding-left:1em" title="Account History"></i>
+                        </a>
+                        <form action="#" th:action="@{/secureCard}" style="display: inline-flex;margin: -10px 15px 0 0px;padding-left: 5px;width: 10px;"
+                              method="post">
+                            <button type="submit" class="btn btn-primary-outline" style="padding: 0" onclick="this.blur();">
+                                <i th:class="${account.isLocked==false} ? 'fas fa-lock': 'fas fa-lock-open'"
+                                   style="padding-left:1em;" title="Lock/Unlock Account"></i>
+                            </button>
+                            <input type="hidden" class="form-control" id="hiddenInfo" min="0" th:value="${account.id}"
+                                   name="accountId">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--End Accounts table -->
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/374498bfdb.js" crossorigin="anonymous"></script>
+
+<script>
+    $('#accountTypes').on('change', function() {
+            var numstr = $(this).val() + "";
+            console.log(numstr);
+            var numarr = numstr.split(',');
+            console.log(numarr);
+
+            $('tr[id^=row]').hide();
+            $.each(numarr, function(i, val) {
+                $('tr.' + val).show();
+            });
+        });
+</script>
+</body>
+</html>
